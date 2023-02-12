@@ -1,2 +1,2 @@
-# Cobblemon-Template
-Template for Fabric addon mods for Cobblemon
+# Whats In Your Wallet
+Cobblemon sidemod that acts as a multi-currency core and API 🪙

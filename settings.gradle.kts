@@ -1,4 +1,4 @@
-rootProject.name = "CobblemonTemplate"
+rootProject.name = "WhatsInYourWallet"
 pluginManagement {
     repositories {
         maven("https://maven.fabricmc.net/") {

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "whatsinyourwallet",
   "version": "${version}",
-  "name": "ExampleMod",
-  "description": "Template for Cobblemon addon development",
+  "name": "WhatsInYourWallet",
+  "description": "A multi-currency core and API",
   "authors": [
     "Reyn"
   ],
@@ -14,11 +14,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.examplemod.ExampleMod"
+      "dot.reyn.whatsinyourwallet.WhatsInYourWallet"
     ]
   },
   "mixins": [
-    "examplemod.mixins.json"
+
   ],
   "depends": {
     "fabricloader": ">=0.14.10",

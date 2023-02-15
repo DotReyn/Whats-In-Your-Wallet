@@ -15,17 +15,21 @@ repositories {
             includeGroup("curse.maven")
         }
     }
+    maven {
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    mavenCentral()
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}")
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-
-    //modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
-
+    modImplementation(include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
     modImplementation("curse.maven:cobblemon-687131:${property("cobblemon_curse_file_id")}")
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.5.1")!!)
+    modImplementation(include("dev.vankka:enhancedlegacytext:1.0.0")!!)
 }
 
 tasks {

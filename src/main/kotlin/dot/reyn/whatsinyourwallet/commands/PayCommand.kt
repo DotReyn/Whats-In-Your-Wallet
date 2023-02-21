@@ -7,8 +7,15 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
 import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import com.mojang.brigadier.context.CommandContext
+import dot.reyn.whatsinyourwallet.WhatsInYourWallet
 import dot.reyn.whatsinyourwallet.api.Currency
 import dot.reyn.whatsinyourwallet.api.CurrencyAPI
+import dot.reyn.whatsinyourwallet.api.transaction.Transaction
+import dot.reyn.whatsinyourwallet.api.transaction.TransactionResultType
+import dot.reyn.whatsinyourwallet.api.transaction.TransactionType
+import dot.reyn.whatsinyourwallet.extensions.getBalance
+import dot.reyn.whatsinyourwallet.extensions.message
+import dot.reyn.whatsinyourwallet.extensions.transaction
 import me.lucko.fabric.api.permissions.v0.Permissions
 import net.minecraft.command.EntitySelector
 import net.minecraft.command.argument.EntityArgumentType
@@ -20,7 +27,7 @@ object PayCommand {
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {
         dispatcher.register(
             literal<ServerCommandSource>("pay")
-                .requires(Permissions.require("whatsinyourwallet.balance.pay", 4))
+                .requires(Permissions.require("whatsinyourwallet.pay", 4))
                 .then(
                     argument<ServerCommandSource, EntitySelector>("receiver", EntityArgumentType.player())
                         .then(
@@ -66,7 +73,33 @@ object PayCommand {
             return Command.SINGLE_SUCCESS
         }
 
-        // TODO: Implement payment logic
+        if (player.getBalance(currency) < amount) {
+            ctx.source.sendError(Text.literal("You don't have enough ${currency.name}!"))
+            return Command.SINGLE_SUCCESS
+        }
+
+        val result = player.transaction(Transaction(
+            to = player,
+            from = null,
+            transactionType = TransactionType.WITHDRAW,
+            currency = currency,
+            amount = amount,
+        ))
+
+        if (result.resultType == TransactionResultType.SUCCESS) {
+            receivingPlayer.transaction(Transaction(
+                to = receivingPlayer,
+                from = player,
+                transactionType = TransactionType.DEPOSIT,
+                currency = currency,
+                amount = amount,
+            ))
+
+            player.message("<green>You paid ${receivingPlayer.gameProfile.name} $amount ${currency.name}!</green>")
+            receivingPlayer.message("<green>${player.gameProfile.name} paid you $amount ${currency.name}!</green>")
+        } else {
+            ctx.source.sendError(Text.literal("An error occurred while paying!"))
+        }
         return Command.SINGLE_SUCCESS
     }
 }

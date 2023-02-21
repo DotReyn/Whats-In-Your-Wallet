@@ -19,6 +19,7 @@ repositories {
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
     mavenCentral()
+    maven("https://maven.nucleoid.xyz/") { name = "Nucleoid" }
 }
 
 dependencies {
@@ -28,8 +29,8 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
     modImplementation(include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")!!)
     modImplementation("curse.maven:cobblemon-687131:${property("cobblemon_curse_file_id")}")
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.5.1")!!)
-    modImplementation(include("dev.vankka:enhancedlegacytext:1.0.0")!!)
+    modImplementation(include("eu.pb4:placeholder-api:2.0.0-pre.4+1.19.3")!!)
+    modImplementation(include("eu.pb4:common-economy-api:1.0.0")!!)
 }
 
 tasks {

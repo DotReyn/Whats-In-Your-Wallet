@@ -1,9 +1,14 @@
 package dot.reyn.whatsinyourwallet.api
 
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import dot.reyn.whatsinyourwallet.api.transaction.Transaction
 import dot.reyn.whatsinyourwallet.api.transaction.TransactionResult
 import dot.reyn.whatsinyourwallet.api.transaction.TransactionResultType
 import dot.reyn.whatsinyourwallet.api.wallet.WalletProvider
+import eu.pb4.placeholders.api.PlaceholderResult
+import eu.pb4.placeholders.api.Placeholders
+import net.minecraft.util.Identifier
+import org.slf4j.LoggerFactory
 
 class CurrencyAPI {
 
@@ -23,6 +28,14 @@ class CurrencyAPI {
 
     fun registerCurrency(currency: Currency) {
         currencies[currency.id] = currency
+
+        Placeholders.register(Identifier("whatsinyourwallet", currency.id)) { ctx, _ ->
+            if (!ctx.hasPlayer()) {
+                return@register PlaceholderResult.invalid("No player!")
+            }
+            val amount = this.getBalance(ctx.player!!, currency)
+            return@register PlaceholderResult.value("%,d".format(amount))
+        }
     }
 
     fun getCurrency(id: String): Currency? {

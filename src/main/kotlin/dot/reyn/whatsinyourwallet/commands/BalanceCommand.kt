@@ -7,7 +7,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
 import com.mojang.brigadier.builder.RequiredArgumentBuilder.argument
 import com.mojang.brigadier.context.CommandContext
 import dot.reyn.whatsinyourwallet.extensions.smallCaps
-import dot.reyn.whatsinyourwallet.WhatsInYourWallet
 import dot.reyn.whatsinyourwallet.api.Currency
 import dot.reyn.whatsinyourwallet.api.CurrencyAPI
 import dot.reyn.whatsinyourwallet.extensions.getBalance
@@ -35,8 +34,8 @@ object BalanceCommand {
         val player = ctx.source.player ?: return Command.SINGLE_SUCCESS
         val query = this.queryBalanceFor(player, ctx) ?: return Command.SINGLE_SUCCESS
         val formattedBalance = "%,d".format(query.second)
-        val audience = WhatsInYourWallet.platform!!.player(player.uuid)
-        audience.message("&#ef9f76balance".smallCaps() + " &#51576d> &#f2d5cfYou have $formattedBalance ${query.first.name}")
+
+        player.message("<color:#ef9f76>${"balance".smallCaps()}</color> <color:#51576d>></color> <color:#f2d5cf>You have $formattedBalance ${query.first.name}</color>")
         return Command.SINGLE_SUCCESS
     }
 

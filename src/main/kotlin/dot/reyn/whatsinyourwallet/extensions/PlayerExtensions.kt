@@ -4,6 +4,7 @@ import dot.reyn.whatsinyourwallet.api.CurrencyAPI
 import dot.reyn.whatsinyourwallet.api.Currency
 import dot.reyn.whatsinyourwallet.api.transaction.Transaction
 import dot.reyn.whatsinyourwallet.api.transaction.TransactionResult
+import eu.pb4.placeholders.api.TextParserUtils
 import net.minecraft.server.network.ServerPlayerEntity
 
 fun ServerPlayerEntity.getBalance(
@@ -17,4 +18,11 @@ fun ServerPlayerEntity.getBalance(
 
 fun <T, F> ServerPlayerEntity.transaction(transaction: Transaction<T, F>): TransactionResult<T, F> {
     return CurrencyAPI.getInstance().runTransaction(this, transaction)
+}
+
+fun ServerPlayerEntity.message(message: String) {
+    val text = TextParserUtils.formatNodes(message).toText()
+    if (text != null) {
+        this.sendMessage(text)
+    }
 }
